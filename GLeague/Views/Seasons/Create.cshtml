@@ -1,0 +1,77 @@
+@model GLeague.Models.Season
+@{
+    ViewData["Title"] = "Create Season";
+}
+
+<h1 class="h3 mb-3">Create a season</h1>
+<p class="text-muted">Managers can define the registration window, draft date, and limits for teams and players.</p>
+
+<form asp-action="Create" class="card shadow-sm">
+    <div class="card-body row g-3">
+        <div class="col-md-6">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Year" class="form-label"></label>
+            <input asp-for="Year" class="form-control" />
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="RegistrationOpens" class="form-label"></label>
+            <input asp-for="RegistrationOpens" class="form-control" />
+            <span asp-validation-for="RegistrationOpens" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="RegistrationCloses" class="form-label"></label>
+            <input asp-for="RegistrationCloses" class="form-control" />
+            <span asp-validation-for="RegistrationCloses" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="DraftDate" class="form-label"></label>
+            <input asp-for="DraftDate" class="form-control" />
+            <span asp-validation-for="DraftDate" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="StartDate" class="form-label"></label>
+            <input asp-for="StartDate" class="form-control" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="EndDate" class="form-label"></label>
+            <input asp-for="EndDate" class="form-control" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="MaxTeams" class="form-label"></label>
+            <input asp-for="MaxTeams" class="form-control" />
+            <span class="form-text">0 means unlimited.</span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="MaxPlayersPerTeam" class="form-label"></label>
+            <input asp-for="MaxPlayersPerTeam" class="form-control" />
+            <span class="form-text">0 means unlimited.</span>
+        </div>
+
+        <div class="col-md-6 form-check">
+            <input asp-for="IsCurrent" class="form-check-input" />
+            <label asp-for="IsCurrent" class="form-check-label"></label>
+        </div>
+        <div class="col-md-6 form-check">
+            <input asp-for="IsLocked" class="form-check-input" />
+            <label asp-for="IsLocked" class="form-check-label"></label>
+        </div>
+    </div>
+    <div class="card-footer text-end">
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save season</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

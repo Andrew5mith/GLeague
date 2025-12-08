@@ -1,0 +1,84 @@
+@model IEnumerable<GLeague.ViewModels.SeasonListItemViewModel>
+@{
+    ViewData["Title"] = "Seasons";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h1 class="h3 mb-0">League Seasons</h1>
+        <p class="text-muted mb-0">Keep track of registration windows, draft dates, and how many hoopers are signed up.</p>
+    </div>
+    @if (User.IsInRole("Manager"))
+    {
+        <a class="btn btn-primary" asp-action="Create">Create Season</a>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No seasons have been created yet. Managers can add one to open registration.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var item in Model)
+        {
+            var season = item.Season;
+            <div class="col">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start justify-content-between mb-2">
+                            <div>
+                                <h2 class="h5 mb-1">@season.Name</h2>
+                                <span class="badge bg-secondary">@season.Year</span>
+                            </div>
+                            @if (season.IsCurrent)
+                            {
+                                <span class="badge bg-success">Current season</span>
+                            }
+                            else if (season.RegistrationOpens > DateTime.UtcNow)
+                            {
+                                <span class="badge bg-info text-dark">Registration opens @season.RegistrationOpens.ToShortDateString()</span>
+                            }
+                            else if (season.RegistrationCloses < DateTime.UtcNow)
+                            {
+                                <span class="badge bg-light text-dark">Registration closed</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary">Registration open</span>
+                            }
+                        </div>
+                        <p class="small text-muted mb-2">
+                            Draft: @(season.DraftDate?.ToShortDateString() ?? "TBD") •
+                            Starts: @(season.StartDate?.ToShortDateString() ?? "TBD") •
+                            Ends: @(season.EndDate?.ToShortDateString() ?? "TBD")
+                        </p>
+                        <p class="mb-3">Max teams: @(season.MaxTeams == 0 ? "Unlimited" : season.MaxTeams)
+                            • Max players/team: @(season.MaxPlayersPerTeam == 0 ? "Unlimited" : season.MaxPlayersPerTeam)</p>
+
+                        <div class="d-flex gap-3 mb-3">
+                            <div>
+                                <div class="fw-bold">@item.TotalRegistrations</div>
+                                <div class="text-muted small">Total registrants</div>
+                            </div>
+                            <div>
+                                <div class="fw-bold">@item.PendingRegistrations</div>
+                                <div class="text-muted small">Pending review</div>
+                            </div>
+                            <div>
+                                <div class="fw-bold">@item.ApprovedRegistrations</div>
+                                <div class="text-muted small">Approved</div>
+                            </div>
+                            <div>
+                                <div class="fw-bold">@item.WaitlistedRegistrations</div>
+                                <div class="text-muted small">Waitlisted</div>
+                            </div>
+                        </div>
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@season.Id">View details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
