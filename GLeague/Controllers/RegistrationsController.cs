@@ -65,6 +65,59 @@ namespace GLeague.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> Manage(int seasonId)
+        {
+            var season = await _context.Seasons
+                .FirstOrDefaultAsync(s => s.Id == seasonId);
+
+            if (season == null)
+            {
+                return NotFound();
+            }
+
+            var registrations = await _context.SeasonRegistrations
+                .Where(r => r.SeasonId == seasonId)
+                .Include(r => r.Player)
+                    .ThenInclude(p => p.PlayerProfile)
+                .OrderBy(r => r.Status)
+                .ThenBy(r => r.CreatedOn)
+                .ToListAsync();
+
+            var viewModel = new RegistrationManagementViewModel
+            {
+                Season = season,
+                Registrations = registrations
+            };
+
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int registrationId, RegistrationStatus status)
+        {
+            var registration = await _context.SeasonRegistrations
+                .Include(r => r.Player)
+                .FirstOrDefaultAsync(r => r.Id == registrationId);
+
+            if (registration == null)
+            {
+                return NotFound();
+            }
+
+            registration.Status = status;
+            await _context.SaveChangesAsync();
+
+            var playerName = registration.Player?.PlayerProfile != null
+                ? $"{registration.Player.PlayerProfile.FirstName} {registration.Player.PlayerProfile.LastName}".Trim()
+                : registration.Player?.Email ?? "Player";
+
+            TempData["Message"] = $"Updated {playerName}'s registration to {status}.";
+            return RedirectToAction(nameof(Manage), new { seasonId = registration.SeasonId });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(int seasonId, string? notes)

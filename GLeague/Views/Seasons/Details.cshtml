@@ -9,7 +9,13 @@
         <h1 class="h3 mb-0">@season.Name (@season.Year)</h1>
         <p class="text-muted mb-0">Draft: @(season.DraftDate?.ToShortDateString() ?? "TBD") • Starts: @(season.StartDate?.ToShortDateString() ?? "TBD")</p>
     </div>
-    <a class="btn btn-outline-secondary" asp-action="Index">Back to seasons</a>
+    <div class="d-flex gap-2">
+        @if (User.IsInRole("Manager"))
+        {
+            <a class="btn btn-primary" asp-controller="Registrations" asp-action="Manage" asp-route-seasonId="@season.Id">Manage registrations</a>
+        }
+        <a class="btn btn-outline-secondary" asp-action="Index">Back to seasons</a>
+    </div>
 </div>
 
 <div class="row g-4">
