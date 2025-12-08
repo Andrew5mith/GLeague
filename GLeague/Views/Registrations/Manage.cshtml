@@ -1,0 +1,73 @@
+@model GLeague.ViewModels.RegistrationManagementViewModel
+@{
+    ViewData["Title"] = $"Manage registrations - {Model.Season.Name}";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h1 class="h3 mb-0">Manage registrations</h1>
+        <p class="text-muted mb-0">@Model.Season.Name (@Model.Season.Year)</p>
+    </div>
+    <a class="btn btn-outline-secondary" asp-controller="Seasons" asp-action="Details" asp-route-id="@Model.Season.Id">Back to season</a>
+</div>
+
+@if (TempData["Message"] is string message)
+{
+    <div class="alert alert-success">@message</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-header">@Model.Registrations.Count registration@(Model.Registrations.Count == 1 ? "" : "s")</div>
+    <div class="card-body">
+        @if (!Model.Registrations.Any())
+        {
+            <div class="text-muted">No registrations yet. Share the signup link with your players.</div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Status</th>
+                            <th>Submitted</th>
+                            <th class="w-25">Notes</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var registration in Model.Registrations)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@registration.Player?.PlayerProfile?.FirstName @registration.Player?.PlayerProfile?.LastName</div>
+                                    <div class="small text-muted">@registration.Player?.Email</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">@registration.Status</span>
+                                </td>
+                                <td>@registration.CreatedOn.ToString("g")</td>
+                                <td>@registration.Notes</td>
+                                <td class="text-end">
+                                    <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="registrationId" value="@registration.Id" />
+                                        <div class="input-group input-group-sm">
+                                            <select class="form-select" name="status">
+                                                @foreach (var status in Enum.GetValues<RegistrationStatus>())
+                                                {
+                                                    <option value="@status" selected="@(status == registration.Status)">@status</option>
+                                                }
+                                            </select>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
