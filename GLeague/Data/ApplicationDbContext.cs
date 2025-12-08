@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GLeague.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -63,6 +63,12 @@ namespace GLeague.Data
             builder.Entity<PlayerGameStat>()
                 .HasIndex(s => new { s.GameId, s.PlayerId })
                 .IsUnique();
+
+            builder.Entity<DraftPick>()
+                .HasOne(dp => dp.Team)
+                .WithMany()
+                .HasForeignKey(dp => dp.TeamId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
     }

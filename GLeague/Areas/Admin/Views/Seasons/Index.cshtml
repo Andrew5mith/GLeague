@@ -1,0 +1,31 @@
+﻿@model IEnumerable<GLeague.Models.Season>
+
+@{
+    ViewData["Title"] = "Seasons";
+}
+
+<h1>Seasons</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Current?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Name</td>
+                <td>@s.Year</td>
+                <td>@s.StartDate?.ToShortDateString()</td>
+                <td>@s.EndDate?.ToShortDateString()</td>
+                <td>@(s.IsCurrent ? "Yes" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>
