@@ -1,0 +1,100 @@
+@model GLeague.ViewModels.RegistrationDashboardViewModel
+@{
+    ViewData["Title"] = "Season signups";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h1 class="h3 mb-0">Season signups</h1>
+        <p class="text-muted mb-0">Register for open seasons and see your status in one place.</p>
+    </div>
+    <a class="btn btn-outline-secondary" asp-controller="Seasons" asp-action="Index">Browse seasons</a>
+</div>
+
+@if (TempData["Message"] is string message)
+{
+    <div class="alert alert-success">@message</div>
+}
+
+<h2 class="h5 mt-4">Open seasons</h2>
+@if (Model.OpenSeasons.Count == 0)
+{
+    <div class="alert alert-info">No registration windows are open right now. Check back soon!</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var card in Model.OpenSeasons)
+        {
+            <div class="col">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div>
+                                <h3 class="h5 mb-1">@card.Season.Name</h3>
+                                <div class="text-muted small">Closes @card.Season.RegistrationCloses.ToShortDateString()</div>
+                            </div>
+                            <span class="badge bg-primary">@card.Season.Year</span>
+                        </div>
+                        <p class="small text-muted mb-2">Draft: @(card.Season.DraftDate?.ToShortDateString() ?? "TBD")</p>
+                        <p class="mb-3">@card.TotalRegistrations player@(card.TotalRegistrations == 1 ? "" : "s") signed up</p>
+
+                        @if (card.ExistingRegistration != null)
+                        {
+                            <div class="alert alert-secondary mb-0">
+                                <div class="fw-semibold">Already registered</div>
+                                <div class="small">Status: @card.ExistingRegistration.Status</div>
+                            </div>
+                        }
+                        else
+                        {
+                            <form asp-action="Register" method="post" class="mt-2">
+                                <input type="hidden" name="seasonId" value="@card.Season.Id" />
+                                <div class="mb-2">
+                                    <label class="form-label" for="notes-@card.Season.Id">Notes to the manager (optional)</label>
+                                    <textarea class="form-control" id="notes-@card.Season.Id" name="notes" rows="2" placeholder="Share schedule conflicts, preferred position, etc."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Submit registration</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<h2 class="h5 mt-5">My registrations</h2>
+@if (Model.MyRegistrations.Count == 0)
+{
+    <div class="alert alert-light">You have not registered for any seasons yet.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Season</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var registration in Model.MyRegistrations)
+                {
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">@registration.Season.Name (@registration.Season.Year)</div>
+                            <div class="small text-muted">Registration closed @registration.Season.RegistrationCloses.ToShortDateString()</div>
+                        </td>
+                        <td><span class="badge bg-secondary">@registration.Status</span></td>
+                        <td>@registration.CreatedOn.ToString("g")</td>
+                        <td>@registration.Notes</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

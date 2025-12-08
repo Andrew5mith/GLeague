@@ -3,6 +3,36 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">GLeague Hoops</h1>
+    <p class="lead">Run your community basketball league with online registration, drafts, and team management.</p>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Season registration</h2>
+                <p>Players can create accounts, register for open seasons, and track their status.</p>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Registrations" asp-action="Index">Register now</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Draft planning</h2>
+                <p>Managers see who has signed up, capture notes, and plan draft days for each division.</p>
+                <a class="btn btn-outline-primary btn-sm" asp-controller="Seasons" asp-action="Index">View seasons</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Team + stats</h2>
+                <p>Keep captains, rosters, venues, games, and player stat tracking together in one place.</p>
+                <a class="btn btn-outline-primary btn-sm" asp-area="Identity" asp-page="/Account/Register">Create account</a>
+            </div>
+        </div>
+    </div>
 </div>

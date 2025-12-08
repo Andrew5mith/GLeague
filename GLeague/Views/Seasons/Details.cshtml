@@ -1,0 +1,119 @@
+@model GLeague.ViewModels.SeasonDetailsViewModel
+@{
+    ViewData["Title"] = Model.Season.Name;
+    var season = Model.Season;
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+        <h1 class="h3 mb-0">@season.Name (@season.Year)</h1>
+        <p class="text-muted mb-0">Draft: @(season.DraftDate?.ToShortDateString() ?? "TBD") • Starts: @(season.StartDate?.ToShortDateString() ?? "TBD")</p>
+    </div>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back to seasons</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">Key dates</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Registration opens</dt>
+                    <dd class="col-sm-7">@season.RegistrationOpens.ToShortDateString()</dd>
+
+                    <dt class="col-sm-5">Registration closes</dt>
+                    <dd class="col-sm-7">@season.RegistrationCloses.ToShortDateString()</dd>
+
+                    <dt class="col-sm-5">Draft date</dt>
+                    <dd class="col-sm-7">@(season.DraftDate?.ToShortDateString() ?? "TBD")</dd>
+
+                    <dt class="col-sm-5">Season start</dt>
+                    <dd class="col-sm-7">@(season.StartDate?.ToShortDateString() ?? "TBD")</dd>
+
+                    <dt class="col-sm-5">Season end</dt>
+                    <dd class="col-sm-7">@(season.EndDate?.ToShortDateString() ?? "TBD")</dd>
+
+                    <dt class="col-sm-5">Max teams</dt>
+                    <dd class="col-sm-7">@(season.MaxTeams == 0 ? "Unlimited" : season.MaxTeams)</dd>
+
+                    <dt class="col-sm-5">Players per team</dt>
+                    <dd class="col-sm-7">@(season.MaxPlayersPerTeam == 0 ? "Unlimited" : season.MaxPlayersPerTeam)</dd>
+
+                    <dt class="col-sm-5">Locked?</dt>
+                    <dd class="col-sm-7">@(season.IsLocked ? "Yes" : "No")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">Divisions</div>
+            <div class="card-body">
+                @if (season.Divisions == null || !season.Divisions.Any())
+                {
+                    <div class="text-muted">No divisions added yet.</div>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var division in season.Divisions)
+                        {
+                            <li class="list-group-item">
+                                <div class="fw-semibold">@division.Name</div>
+                                <div class="small text-muted">@division.SkillLevel</div>
+                                <div class="small">Teams: @(division.Teams?.Count ?? 0)</div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Registrations (@Model.Registrations.Count)</span>
+        <a class="btn btn-sm btn-outline-primary" asp-controller="Registrations" asp-action="Index">Manage my registration</a>
+    </div>
+    <div class="card-body">
+        @if (!Model.Registrations.Any())
+        {
+            <div class="text-muted">No players have signed up yet.</div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Status</th>
+                            <th>Signed up</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var registration in Model.Registrations)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold">@registration.Player?.Email</div>
+                                    @if (registration.Player?.PlayerProfile != null)
+                                    {
+                                        <div class="small text-muted">@registration.Player.PlayerProfile.FirstName @registration.Player.PlayerProfile.LastName</div>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">@registration.Status</span>
+                                </td>
+                                <td>@registration.CreatedOn.ToString("g")</td>
+                                <td>@registration.Notes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
