@@ -1,31 +1,89 @@
 ﻿@model IEnumerable<GLeague.Models.Season>
 
 @{
+    Layout = "_AdminPage";  // <-- use the shared admin page layout
     ViewData["Title"] = "Seasons";
+    ViewData["Subtitle"] = "Manage league seasons, registration windows, and active season status.";
 }
 
-<h1>Seasons</h1>
+@section PageActions {
+    <a asp-area="Admin"
+       asp-controller="Seasons"
+       asp-action="Create"
+       class="btn btn-primary rounded-pill px-4 shadow-sm">
+        + New season
+    </a>
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Year</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Current?</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var s in Model)
-        {
-            <tr>
-                <td>@s.Name</td>
-                <td>@s.Year</td>
-                <td>@s.StartDate?.ToShortDateString()</td>
-                <td>@s.EndDate?.ToShortDateString()</td>
-                <td>@(s.IsCurrent ? "Yes" : "No")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <div class="admin-card-title">All seasons</div>
+            <div class="admin-card-subtitle">
+                @Model.Count() season@(Model.Count() == 1 ? "" : "s") total
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Year</th>
+                    <th>Registration</th>
+                    <th>Season</th>
+                    <th class="text-center">Max teams</th>
+                    <th class="text-center">Max players / team</th>
+                    <th class="text-center">Current?</th>
+                    <th class="text-end"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@s.Name</td>
+                        <td>@s.Year</td>
+                        <td>
+                            @s.RegistrationOpens.ToShortDateString()
+                            <span class="text-muted">–</span>
+                            @s.RegistrationCloses.ToShortDateString()
+                        </td>
+                        <td>
+                            @if (s.StartDate.HasValue && s.EndDate.HasValue)
+                            {
+                                @s.StartDate.Value.ToShortDateString()
+                                <span class="text-muted">–</span>
+                                @s.EndDate.Value.ToShortDateString()
+                            }
+                        </td>
+                        <td class="text-center">
+                            @(s.MaxTeams == 0 ? "∞" : s.MaxTeams.ToString())
+                        </td>
+                        <td class="text-center">
+                            @(s.MaxPlayersPerTeam == 0 ? "∞" : s.MaxPlayersPerTeam.ToString())
+                        </td>
+                        <td class="text-center">
+                            @if (s.IsCurrent)
+                            {
+                                <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3">
+                                    Current
+                                </span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-area="Admin"
+                               asp-controller="Seasons"
+                               asp-action="Edit"
+                               asp-route-id="@s.Id"
+                               class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

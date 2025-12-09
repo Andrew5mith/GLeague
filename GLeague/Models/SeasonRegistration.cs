@@ -5,10 +5,10 @@
         public int Id { get; set; }
 
         public int SeasonId { get; set; }
-        public required Season Season { get; set; }
+        public Season Season { get; set; } = null!;
 
-        public required string PlayerId { get; set; }
-        public required ApplicationUser Player { get; set; }
+        public string PlayerId { get; set; } = null!;
+        public ApplicationUser Player { get; set; } = null!;
 
         public RegistrationStatus Status { get; set; } = RegistrationStatus.Pending;
 

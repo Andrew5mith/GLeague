@@ -1,0 +1,77 @@
+﻿@model GLeague.Models.Season
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Year" class="form-label"></label>
+            <input asp-for="Year" class="form-control" />
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="IsCurrent" class="form-check-input" />
+            <label asp-for="IsCurrent" class="form-check-label"></label>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="IsLocked" class="form-check-input" />
+            <label asp-for="IsLocked" class="form-check-label"></label>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h5 class="mb-3">Dates</h5>
+
+        <div class="mb-3">
+            <label asp-for="RegistrationOpens" class="form-label"></label>
+            <input asp-for="RegistrationOpens" class="form-control" type="date" />
+            <span asp-validation-for="RegistrationOpens" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="RegistrationCloses" class="form-label"></label>
+            <input asp-for="RegistrationCloses" class="form-control" type="date" />
+            <span asp-validation-for="RegistrationCloses" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DraftDate" class="form-label"></label>
+            <input asp-for="DraftDate" class="form-control" type="date" />
+            <span asp-validation-for="DraftDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="StartDate" class="form-label"></label>
+            <input asp-for="StartDate" class="form-control" type="date" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EndDate" class="form-label"></label>
+            <input asp-for="EndDate" class="form-control" type="date" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+
+        <h5 class="mb-3 mt-3">Capacity</h5>
+
+        <div class="mb-3">
+            <label asp-for="MaxTeams" class="form-label"></label>
+            <input asp-for="MaxTeams" class="form-control" />
+            <span class="form-text">0 = unlimited</span>
+            <span asp-validation-for="MaxTeams" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MaxPlayersPerTeam" class="form-label"></label>
+            <input asp-for="MaxPlayersPerTeam" class="form-control" />
+            <span class="form-text">0 = unlimited</span>
+            <span asp-validation-for="MaxPlayersPerTeam" class="text-danger"></span>
+        </div>
+    </div>
+</div>

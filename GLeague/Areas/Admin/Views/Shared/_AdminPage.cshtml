@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+
+    var title = ViewData["Title"] as string ?? "Page";
+    var subtitle = ViewData["Subtitle"] as string ?? "";
+
+    // Optional parent crumb (e.g. "Seasons")
+    var parentTitle = ViewData["ParentTitle"] as string;
+    var parentUrl = ViewData["ParentUrl"] as string;
+
+    // Optional override for the last crumb text (defaults to page title)
+    var breadcrumbTitle = ViewData["BreadcrumbTitle"] as string ?? title;
+}
+
+<div class="admin-page-header mb-3">
+    <div class="admin-breadcrumb d-flex align-items-center mb-1">
+        <span class="admin-breadcrumb-icon" aria-hidden="true">
+            <!-- Home icon -->
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 11.5L12 4L21 11.5V20C21 20.5523 20.5523 21 20 21H15.5C14.9477 21 14.5 20.5523 14.5 20V15.5C14.5 14.9477 14.0523 14.5 13.5 14.5H10.5C9.94772 14.5 9.5 14.9477 9.5 15.5V20C9.5 20.5523 9.05228 21 8.5 21H4C3.44772 21 3 20.5523 3 20V11.5Z"
+                      stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </span>
+
+        @* Parent crumb: Home > Seasons > ... *@
+        @if (!string.IsNullOrWhiteSpace(parentTitle))
+        {
+            <span class="admin-breadcrumb-separator" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 4.5L12 10L7 15.5" stroke="currentColor" stroke-width="1.6"
+                          stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </span>
+
+            if (!string.IsNullOrWhiteSpace(parentUrl))
+            {
+                <a href="@parentUrl" class="admin-breadcrumb-parent">
+                    @parentTitle
+                </a>
+            }
+            else
+            {
+                <span class="admin-breadcrumb-parent">@parentTitle</span>
+            }
+        }
+
+        @* Current crumb *@
+        <span class="admin-breadcrumb-separator" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 4.5L12 10L7 15.5" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </span>
+
+        <span class="admin-breadcrumb-current">@breadcrumbTitle</span>
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center">
+        <div class="mb-2">
+            <h1 class="admin-page-title mb-1">@title</h1>
+
+            @if (!string.IsNullOrWhiteSpace(subtitle))
+            {
+                <p class="admin-page-subtitle mb-0">
+                    @subtitle
+                </p>
+            }
+        </div>
+
+        <div class="mb-2">
+            @RenderSection("PageActions", required: false)
+        </div>
+    </div>
+</div>
+
+<div class="admin-page-body">
+    @RenderBody()
+</div>
+
+@section Scripts {
+    @RenderSection("PageScripts", required: false)
+}
+
