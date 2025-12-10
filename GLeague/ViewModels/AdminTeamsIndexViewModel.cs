@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using GLeague.Models;
 
-namespace GLeague.Models
+namespace GLeague.ViewModels
 {
     public class AdminTeamsIndexViewModel
     {

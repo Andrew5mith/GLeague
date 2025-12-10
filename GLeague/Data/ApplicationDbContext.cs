@@ -12,7 +12,6 @@ namespace GLeague.Data
         }
         public DbSet<PlayerProfile> PlayerProfiles { get; set; }
         public DbSet<Season> Seasons { get; set; }
-        public DbSet<Division> Divisions { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamMembership> TeamMemberships { get; set; }
         public DbSet<SeasonRegistration> SeasonRegistrations { get; set; }

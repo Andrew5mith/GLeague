@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using GLeague.Data;
 using GLeague.Models;
+using GLeague.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,13 +50,16 @@ namespace GLeague.Areas.Admin.Controllers
         }
 
         // GET: /Admin/Teams/Create?seasonId=1
+        [HttpGet]
         public async Task<IActionResult> Create(int? seasonId)
         {
             await PopulateSeasonsDropDownList(seasonId);
+
             var team = new Team
             {
                 SeasonId = seasonId ?? 0
             };
+
             return View(team);
         }
 

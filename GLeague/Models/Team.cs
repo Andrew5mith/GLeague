@@ -15,15 +15,12 @@ namespace GLeague.Models
         public string? ColorPrimary { get; set; }
         public string? ColorSecondary { get; set; }
 
-        public int DivisionId { get; set; }
-        public Division Division { get; set; } = null!;
-
         public string? CaptainId { get; set; }
         public ApplicationUser? Captain { get; set; }
 
         [Required]
         public int SeasonId { get; set; }
-        public Season Season { get; set; } = null!;
+        public Season? Season { get; set; }
 
         public bool IsArchived { get; set; }
 
@@ -31,6 +28,4 @@ namespace GLeague.Models
         public ICollection<Game> HomeGames { get; set; } = new List<Game>();
         public ICollection<Game> AwayGames { get; set; } = new List<Game>();
     }
-
-
 }

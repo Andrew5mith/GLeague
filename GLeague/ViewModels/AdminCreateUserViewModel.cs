@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GLeague.Models
+namespace GLeague.ViewModels
 {
     public class AdminCreateUserViewModel
     {

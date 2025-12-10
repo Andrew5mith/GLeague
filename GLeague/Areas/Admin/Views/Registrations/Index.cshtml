@@ -1,0 +1,184 @@
+@using GLeague.Models
+@model GLeague.ViewModels.AdminRegistrationsIndexViewModel
+
+@{
+    Layout = "_AdminPage";
+
+    ViewData["Title"] = "Registrations";
+    ViewData["Subtitle"] = "Review and approve player registrations.";
+    ViewData["ParentTitle"] = "Dashboard";
+    ViewData["ParentUrl"] = Url.Action("Index", "Home", new { area = "Admin" });
+    ViewData["BreadcrumbTitle"] = "Registrations";
+}
+
+@section PageActions {
+    <form asp-action="Index" method="get" class="d-flex gap-2 align-items-center">
+        <select name="seasonId" class="form-select form-select-sm" style="width:220px;">
+            <option value="">All seasons</option>
+            @foreach (var s in Model.Seasons)
+            {
+                var isSelected = Model.SelectedSeasonId.HasValue && Model.SelectedSeasonId.Value == s.Id;
+
+                <option value="@s.Id" selected="@(isSelected ? "selected" : null)">
+                    @s.Name (@s.Year)
+                </option>
+            }
+        </select>
+
+        <div class="form-check form-switch ms-2">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="showOnlyPending"
+                   value="true"
+                   @(Model.ShowOnlyPending ? "checked" : null)
+                   onchange="this.form.submit()" />
+            <label class="form-check-label">Pending only</label>
+        </div>
+
+        <button type="submit" class="btn btn-outline-secondary btn-sm ms-2">
+            Filter
+        </button>
+    </form>
+}
+
+<div class="admin-card">
+    @if (!Model.Registrations.Any())
+    {
+        <p class="text-muted mb-0">No registrations found for the selected filters.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Season</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Experience</th>
+                        <th>Position</th>
+                        <th>Jersey</th>
+                        <th>City</th>
+                        <th>Registered</th>
+                        <th>Status</th>
+                        <th class="text-end"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model.Registrations)
+                    {
+                        var profile = r.Player?.PlayerProfile;
+
+                        <tr>
+                            <td>@r.Season.Name (@r.Season.Year)</td>
+
+                            <td>
+                                @if (profile != null)
+                                {
+                                    @($"{profile.FirstName} {profile.LastName}")
+                                }
+                                else
+                                {
+                                    @r.Player?.UserName
+                                }
+                            </td>
+
+                            <td>@r.Player?.Email</td>
+
+                            <td>
+                                @if (profile != null)
+                                {
+                                    @profile.ExperienceLevel.ToString()
+                                }
+                                else
+                                {
+                                    <span class="text-muted">n/a</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (profile != null)
+                                {
+                                    @profile.PreferredPosition.ToString()
+                                }
+                                else
+                                {
+                                    <span class="text-muted">n/a</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (profile != null)
+                                {
+                                    @($"{profile.JerseySize} #{profile.JerseyNumber} {profile.JerseyName}")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">n/a</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (profile != null)
+                                {
+                                    @profile.CityOfResidence
+                                }
+                                else
+                                {
+                                    <span class="text-muted">n/a</span>
+                                }
+                            </td>
+
+                            <td>@r.CreatedOn.ToLocalTime().ToString("g")</td>
+
+                            <td>
+                                @switch (r.Status)
+                                {
+                                    case RegistrationStatus.Pending:
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        break;
+                                    case RegistrationStatus.Approved:
+                                        <span class="badge bg-success">Approved</span>
+                                        break;
+                                    case RegistrationStatus.Waitlisted:
+                                        <span class="badge bg-info text-dark">Waitlisted</span>
+                                        break;
+                                    case RegistrationStatus.Cancelled:
+                                        <span class="badge bg-secondary">Cancelled</span>
+                                        break;
+                                }
+                            </td>
+
+                            <td class="text-end">
+                                @if (r.Status == RegistrationStatus.Pending)
+                                {
+                                    <form asp-action="Approve"
+                                          asp-route-id="@r.Id"
+                                          method="post"
+                                          class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            Approve
+                                        </button>
+                                    </form>
+
+                                    <form asp-action="Cancel"
+                                          asp-route-id="@r.Id"
+                                          method="post"
+                                          class="d-inline ms-1">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">No actions</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

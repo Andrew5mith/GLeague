@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using GLeague.Data;
 using GLeague.Models;
+using GLeague.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

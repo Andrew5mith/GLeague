@@ -14,32 +14,45 @@
 }
 
 <form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="admin-card">
-        <div class="mb-3">
-            <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
+    <!-- Team name -->
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
 
-        <div class="mb-3">
-            <label asp-for="SeasonId" class="form-label">Season</label>
-            <select asp-for="SeasonId" class="form-select">
-                <option value="">Select a season</option>
-                @if (seasonOptions != null)
-                {
-                    foreach (var s in seasonOptions)
-                    {
-                        <option value="@s.Id" selected="@(selectedSeasonId == (int?)s.Id ? "selected" : null)">
-                            @s.Label
-                        </option>
-                    }
-                }
-            </select>
+    <!-- Short name -->
+    <div class="mb-3">
+        <label asp-for="ShortName" class="form-label"></label>
+        <input asp-for="ShortName" class="form-control" />
+        <span asp-validation-for="ShortName" class="text-danger"></span>
+    </div>
 
-            <span asp-validation-for="SeasonId" class="text-danger"></span>
-        </div>
+    <!-- Primary color -->
+    <div class="mb-3">
+        <label asp-for="ColorPrimary" class="form-label"></label>
+        <input asp-for="ColorPrimary" class="form-control" />
+        <span asp-validation-for="ColorPrimary" class="text-danger"></span>
+    </div>
+
+    <!-- Secondary color -->
+    <div class="mb-3">
+        <label asp-for="ColorSecondary" class="form-label"></label>
+        <input asp-for="ColorSecondary" class="form-control" />
+        <span asp-validation-for="ColorSecondary" class="text-danger"></span>
+    </div>
+
+    <!-- Season dropdown -->
+    <div class="mb-3">
+        <label asp-for="SeasonId" class="form-label"></label>
+        <select asp-for="SeasonId"
+                class="form-select"
+                asp-items="@(new SelectList(seasonOptions, "Id", "Label", selectedSeasonId))">
+            <option value="">-- Select season --</option>
+        </select>
+        <span asp-validation-for="SeasonId" class="text-danger"></span>
     </div>
 
     <div class="mt-3">
