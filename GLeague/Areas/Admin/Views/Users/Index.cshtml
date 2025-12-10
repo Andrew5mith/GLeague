@@ -1,0 +1,99 @@
+﻿@model IEnumerable<GLeague.Models.ApplicationUser>
+
+@{
+    Layout = "_AdminPage";
+    ViewData["Title"] = "Users";
+    ViewData["Subtitle"] = "Manage application users and access.";
+}
+
+@section PageActions {
+    <a asp-area="Admin" asp-controller="Users" asp-action="Create" class="btn btn-primary rounded-pill px-4 shadow-sm">  + New user </a>
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <div class="admin-card-title">All users</div>
+            <div class="admin-card-subtitle">
+                @Model.Count() user@(Model.Count() == 1 ? "" : "s") total
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>User name</th>
+                    <th>Phone</th>
+                    <th class="text-center">Confirmed?</th>
+                    <th class="text-center">Locked?</th>
+                    <th class="text-end"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    var isLocked = u.LockoutEnd.HasValue && u.LockoutEnd > DateTimeOffset.UtcNow;
+
+                    <tr>
+                        <td>@u.Email</td>
+                        <td>@u.UserName</td>
+                        <td>@u.PhoneNumber</td>
+                        <td class="text-center">
+                            @* If you’re using EmailConfirmed *@
+                            @if (u.EmailConfirmed)
+                            {
+                                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3">
+                                    Yes
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3">
+                                    No
+                                </span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (isLocked)
+                            {
+                                <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle px-3">
+                                    Locked
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle px-3">
+                                    Active
+                                </span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-area="Admin"
+                               asp-controller="Users"
+                               asp-action="Edit"
+                               asp-route-id="@u.Id"
+                               class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1">
+                                Edit
+                            </a>
+
+                            <form asp-area="Admin"
+                                  asp-controller="Users"
+                                  asp-action="ToggleLock"
+                                  asp-route-id="@u.Id"
+                                  method="post"
+                                  class="d-inline">
+                                <button type="submit"
+                                        class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                    @(isLocked ? "Unlock" : "Lock")
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

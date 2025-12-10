@@ -38,6 +38,20 @@
                         </a>
                     </li>
                     <li class="nav-item mb-1">
+                        <a class="nav-link admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Teams" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Teams" asp-action="Index">
+                            <span class="admin-nav-icon">🏀</span>
+                            Teams
+                        </a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Users" asp-action="Index">
+                            <span class="admin-nav-icon">👤</span>
+                            Users
+                        </a>
+                    </li>
+                    <li class="nav-item mb-1">
                         <a class="nav-link admin-nav-link"
                            asp-area="" asp-controller="Registrations" asp-action="Index">
                             <span class="admin-nav-icon">📝</span>

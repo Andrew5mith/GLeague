@@ -14,6 +14,8 @@
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
+        public ICollection<Team> Teams { get; set; } = new List<Team>();
+
         public int MaxTeams { get; set; } = 0;           // 0 = unlimited
         public int MaxPlayersPerTeam { get; set; } = 0;  // 0 = unlimited
 

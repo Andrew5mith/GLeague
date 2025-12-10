@@ -32,11 +32,18 @@ namespace GLeague.Data
                 .WithOne(u => u.PlayerProfile)
                 .HasForeignKey<PlayerProfile>(p => p.UserId);
 
-            // Captain relationship
+            // Team -> Captain (ApplicationUser)
             builder.Entity<Team>()
                 .HasOne(t => t.Captain)
                 .WithMany(u => u.CaptainedTeams)
                 .HasForeignKey(t => t.CaptainId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Team -> Season
+            builder.Entity<Team>()
+                .HasOne(t => t.Season)
+                .WithMany(s => s.Teams)
+                .HasForeignKey(t => t.SeasonId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Team membership

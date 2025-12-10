@@ -1,0 +1,123 @@
+﻿@model GLeague.Models.AdminTeamsIndexViewModel
+
+@{
+    Layout = "_AdminPage";
+    ViewData["Title"] = "Teams";
+    ViewData["Subtitle"] = "Manage teams and their associated seasons.";
+}
+
+@section PageActions {
+    <a asp-area="Admin"
+       asp-controller="Teams"
+       asp-action="Create"
+       asp-route-seasonId="@Model.SelectedSeasonId"
+       class="btn btn-primary rounded-pill px-4 shadow-sm">
+        + New team
+    </a>
+}
+
+<div class="admin-card mb-3">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div>
+            <div class="admin-card-title mb-1">Teams</div>
+            <div class="admin-card-subtitle">
+                @Model.Teams.Count() team@(Model.Teams.Count() == 1 ? "" : "s") shown
+                @if (Model.SelectedSeasonId.HasValue && Model.SelectedSeasonId.Value > 0)
+                {
+                    <span class="text-muted">for selected season</span>
+                }
+                else
+                {
+                    <span class="text-muted">across all seasons</span>
+                }
+            </div>
+        </div>
+
+        <form asp-area="Admin"
+              asp-controller="Teams"
+              asp-action="Index"
+              method="get"
+              class="d-flex align-items-center gap-2">
+            <label for="SeasonFilter" class="small text-muted mb-0">
+                Season
+            </label>
+            <select id="SeasonFilter"
+                    name="seasonId"
+                    class="form-select form-select-sm">
+                <option value="">All seasons</option>
+                @foreach (var s in Model.Seasons)
+                {
+                    <option value="@s.Id"
+                            selected="@(Model.SelectedSeasonId.HasValue && Model.SelectedSeasonId.Value == s.Id ? "selected" : null)">
+                        @s.Name (@s.Year)
+                    </option>
+                }
+            </select>
+        </form>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Season</th>
+                    <th class="text-end"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var team in Model.Teams)
+                {
+                    <tr>
+                        <td>@team.Name</td>
+                        <td>
+                            @* If you have a Season navigation property *@
+                            @if (team.Season != null)
+                            {
+                                @($"{team.Season.Name} ({team.Season.Year})")
+                            }
+                            else
+                            {
+                                @team.SeasonId
+                            }
+
+                        </td>
+                        <td class="text-end">
+                            <a asp-area="Admin"
+                               asp-controller="Teams"
+                               asp-action="Edit"
+                               asp-route-id="@team.Id"
+                               class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+                @if (!Model.Teams.Any())
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                            No teams found for the selected filter.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section PageScripts {
+    <script>
+        (function () {
+            var filter = document.getElementById('SeasonFilter');
+            if (!filter) return;
+
+            filter.addEventListener('change', function () {
+                this.form.submit(); // auto-submit when season changes
+            });
+        })();
+    </script>
+}
