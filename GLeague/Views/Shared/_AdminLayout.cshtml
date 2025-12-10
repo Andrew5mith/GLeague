@@ -52,11 +52,17 @@
                         </a>
                     </li>
                     <li class="nav-item mb-1">
-                        <a asp-area="Admin"
-                           asp-controller="Registrations"
-                           asp-action="Index"
-                           class="nav-link">
-                            Registrations
+                        <a class="nav-link admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "PlayerRegistrations" ? "active" : "")"
+                           asp-area="Admin" asp-controller="PlayerRegistrations" asp-action="Index">
+                            <span class="admin-nav-icon">📝</span>
+                            Player Approvals
+                        </a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link admin-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Registrations" ? "active" : "")"
+                           asp-area="Admin" asp-controller="Registrations" asp-action="Index">
+                            <span class="admin-nav-icon">📋</span>
+                            Season Registrations
                         </a>
                     </li>
                 </ul>

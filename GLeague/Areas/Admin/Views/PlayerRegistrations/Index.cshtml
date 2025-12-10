@@ -1,0 +1,103 @@
+﻿@model IEnumerable<GLeague.Models.ApplicationUser>
+
+@{
+    Layout = "_AdminPage";
+    ViewData["Title"] = "Player registrations";
+    ViewData["Subtitle"] = "Approve or deny new player accounts.";
+    ViewData["ParentTitle"] = "Dashboard";
+    ViewData["ParentUrl"] = Url.Action("Index", "Home", new { area = "Admin" });
+    ViewData["BreadcrumbTitle"] = "Player registrations";
+}
+
+@section PageActions {
+    <span class="text-muted small">
+        Players listed here have created an account but cannot sign in until approved.
+    </span>
+}
+
+<div class="admin-card">
+    <div class="admin-card-header d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <div class="admin-card-title">Pending player registrations</div>
+            <div class="admin-card-subtitle">
+                @Model.Count() pending player@(Model.Count() == 1 ? "" : "s")
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Message"] is string message)
+    {
+        <div class="alert alert-success">@message</div>
+    }
+    else if (TempData["Error"] is string error)
+    {
+        <div class="alert alert-danger">@error</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="text-muted">No pending player registrations right now.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle table-sm">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Experience</th>
+                        <th>Position</th>
+                        <th>Jersey</th>
+                        <th>City</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        var profile = user.PlayerProfile;
+                        <tr>
+                            <td>
+                                <div class="fw-semibold">
+                                    @(profile?.FirstName) @(profile?.LastName)
+                                </div>
+                            </td>
+                            <td>@user.Email</td>
+                            <td>@profile?.PhoneNumber</td>
+                            <td>@profile?.ExperienceLevel</td>
+                            <td>@profile?.PreferredPosition</td>
+                            <td>
+                                @if (profile != null)
+                                {
+                                    <span>@profile.JerseySize</span>
+                                    @if (!string.IsNullOrWhiteSpace(profile.JerseyNumber))
+                                    {
+                                        <span class="small text-muted"> #@profile.JerseyNumber</span>
+                                    }
+                                }
+                            </td>
+                            <td>@profile?.CityOfResidence</td>
+                            <td class="text-end">
+                                <form asp-action="Approve" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        Approve
+                                    </button>
+                                </form>
+
+                                <form asp-action="Deny" method="post" class="d-inline ms-1">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        Deny
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

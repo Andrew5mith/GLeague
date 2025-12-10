@@ -1,0 +1,124 @@
+﻿@model GLeague.ViewModels.RegistrationDashboardViewModel
+
+@{
+    ViewData["Title"] = "My registrations";
+}
+
+<h1 class="h3 mb-3">My registrations</h1>
+
+@if (TempData["Message"] is string message)
+{
+    <div class="alert alert-success">@message</div>
+}
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">
+                Seasons open for registration (@Model.OpenSeasons.Count)
+            </div>
+            <div class="card-body">
+                @if (!Model.OpenSeasons.Any())
+                {
+                    <div class="text-muted">There are no seasons currently accepting registrations.</div>
+                }
+                else
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var card in Model.OpenSeasons)
+                        {
+                            var season = card.Season;
+                            var existing = card.ExistingRegistration;
+
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold">@season.Name (@season.Year)</div>
+                                        <div class="small text-muted">
+                                            Registration:
+                                            @season.RegistrationOpens.ToShortDateString()
+                                            &ndash;
+                                            @season.RegistrationCloses.ToShortDateString()
+                                        </div>
+                                        <div class="small text-muted">
+                                            Total registrations: @card.TotalRegistrations
+                                        </div>
+                                        @if (existing != null)
+                                        {
+                                            <div class="small mt-1">
+                                                <span class="badge bg-secondary">
+                                                    You are @existing.Status
+                                                </span>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="text-end">
+                                        @if (existing == null)
+                                        {
+                                            <form asp-action="Register" method="post">
+                                                <input type="hidden" name="seasonId" value="@season.Id" />
+                                                <button type="submit" class="btn btn-sm btn-primary">
+                                                    Register
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small">
+                                                You’re already registered.
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">
+                My registrations (@Model.MyRegistrations.Count)
+            </div>
+            <div class="card-body">
+                @if (!Model.MyRegistrations.Any())
+                {
+                    <div class="text-muted">You haven’t registered for any seasons yet.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Season</th>
+                                    <th>Status</th>
+                                    <th>Registered on</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model.MyRegistrations)
+                                {
+                                    <tr>
+                                        <td>
+                                            @r.Season?.Name (@r.Season?.Year)
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">@r.Status</span>
+                                        </td>
+                                        <td>@r.CreatedOn.ToString("g")</td>
+                                        <td>@r.Notes</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
