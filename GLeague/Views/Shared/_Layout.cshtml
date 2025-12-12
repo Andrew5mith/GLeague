@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using GLeague.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,63 +11,103 @@
     <title>@ViewData["Title"] - GLeague</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/GLeague.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GLeague</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-dark gleague-navbar">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <div class="brand-logo me-2">
+                        <span class="brand-ball"></span>
+                    </div>
+                    <span class="fw-bold">GLeague</span>
+                    <span class="ms-2 small text-uppercase text-light-50">City Basketball</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <!-- Left side -->
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Seasons" asp-action="Index">Seasons</a>
+                            <a class="nav-link" asp-controller="Games" asp-action="Index">Schedule</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Registrations" asp-action="Index">Registrations</a>
+                            <a class="nav-link" asp-controller="Teams" asp-action="Index">Teams</a>
                         </li>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="MyTeam" asp-action="Index">My Team</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Registrations" asp-action="Index">Register</a>
+                            </li>
+                        }
 
                         @if (User.IsInRole("Manager"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark fw-semibold" asp-area="Admin" asp-controller="Seasons" asp-action="Index">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
                                     Admin
                                 </a>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Seasons" asp-action="Index">
+                                            Seasons
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Registrations" asp-action="Manage" asp-route-seasonId="0">
+                                            Registrations
+                                        </a>
+                                    </li>
+                                    <!-- add more admin links later -->
+                                </ul>
                             </li>
                         }
                     </ul>
 
-                    <!-- Right side (login/logout) -->
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="gleague-main">
+        <div class="container py-4">
+            @if (TempData["Message"] is string message)
+            {
+                <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+                    @message
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
             @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - GLeague - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="gleague-footer">
+        <div class="container d-flex justify-content-between align-items-center">
+            <span>&copy; @DateTime.Now.Year - GLeague</span>
+            <span class="small text-muted">Built for our local basketball community 🏀</span>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

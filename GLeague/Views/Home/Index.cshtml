@@ -1,38 +1,170 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center">
-    <h1 class="display-4">GLeague Hoops</h1>
-    <p class="lead">Run your community basketball league with online registration, drafts, and team management.</p>
+<div class="gleague-hero card border-0 mb-4">
+    <div class="row g-0 align-items-center">
+        <!-- Left: main message -->
+        <div class="col-lg-7 p-4 p-md-5">
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="gleague-tag">Players</span>
+                <span class="gleague-tag">Captains</span>
+                <span class="gleague-tag">Managers</span>
+            </div>
+
+            <h1 class="display-5 fw-bold mb-3">
+                Welcome to <span class="text-highlight">GLeague</span>
+            </h1>
+
+            <p class="lead mb-4">
+                A modern home for our local basketball league. Create your player profile,
+                register for seasons, get drafted to a team, and track your stats all year long.
+            </p>
+
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Registrations" asp-action="Index"
+                       class="btn btn-lg btn-gleague-red">
+                        Register for a Season
+                    </a>
+
+                    <a asp-controller="MyTeam" asp-action="Index"
+                       class="btn btn-outline-light btn-lg gleague-outline-blue">
+                        View My Team
+                    </a>
+                }
+                else
+                {
+                    <a asp-area="Identity" asp-page="/Account/Register"
+                       class="btn btn-lg gleague-primary-btn">
+                        Create an Account
+                    </a>
+
+                    <a asp-area="Identity" asp-page="/Account/Login"
+                       class="btn btn-outline-light btn-lg gleague-outline-blue">
+                        Log In
+                    </a>
+                }
+            </div>
+
+            <div class="small text-light-70">
+                League managers can log in to manage seasons, teams, schedules, and registrations.
+            </div>
+        </div>
+
+        <!-- Right: quick stats / highlights -->
+        <div class="col-lg-5 border-top border-start-lg gleague-hero-right">
+            <div class="p-4 p-md-5 h-100 d-flex flex-column justify-content-center gap-3">
+                <h2 class="h6 text-uppercase text-light-50 mb-2">League at a glance</h2>
+
+                <div class="d-flex flex-column gap-2">
+                    <div class="gleague-stat-chip">
+                        <div class="label">Upcoming Season</div>
+                        <div class="value">Registration opens soon</div>
+                    </div>
+
+                    <div class="gleague-stat-chip">
+                        <div class="label">Teams</div>
+                        <div class="value">Create balanced rosters with drafts &amp; captains</div>
+                    </div>
+
+                    <div class="gleague-stat-chip">
+                        <div class="label">Stats &amp; Schedule</div>
+                        <div class="value">Box scores, standings, and game calendar in one place</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
-    <div class="col">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h2 class="h5">Season registration</h2>
-                <p>Players can create accounts, register for open seasons, and track their status.</p>
-                <a class="btn btn-outline-primary btn-sm" asp-controller="Registrations" asp-action="Index">Register now</a>
+<section class="mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="gleague-section-title mb-0">Everything in one place</h2>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-4">
+            <div class="card h-100 border-0 gleague-feature-card">
+                <div class="card-body">
+                    <div class="gleague-feature-icon">📅</div>
+                    <h5 class="card-title">Season hub</h5>
+                    <p class="card-text">
+                        See registration windows, draft nights, playoffs, and championship dates
+                        at a glance.
+                    </p>
+                    <a asp-controller="Seasons" asp-action="Index" class="card-link">View seasons</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card h-100 border-0 gleague-feature-card">
+                <div class="card-body">
+                    <div class="gleague-feature-icon">🏀</div>
+                    <h5 class="card-title">Schedules &amp; scores</h5>
+                    <p class="card-text">
+                        Game times, locations, and final scores stay up to date so your team
+                        always knows what’s next.
+                    </p>
+                    <a asp-controller="Games" asp-action="Index" class="card-link">View schedule</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card h-100 border-0 gleague-feature-card">
+                <div class="card-body">
+                    <div class="gleague-feature-icon">📊</div>
+                    <h5 class="card-title">Stats &amp; standings</h5>
+                    <p class="card-text">
+                        Track individual stats, team records, and league standings as the season
+                        progresses.
+                    </p>
+                    <a asp-controller="Standings" asp-action="Index" class="card-link">View standings</a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h2 class="h5">Draft planning</h2>
-                <p>Managers see who has signed up, capture notes, and plan draft days for each division.</p>
-                <a class="btn btn-outline-primary btn-sm" asp-controller="Seasons" asp-action="Index">View seasons</a>
+</section>
+
+<section class="mt-4">
+    <h2 class="gleague-section-title mb-3">How it works</h2>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="gleague-step-number">1</div>
+                    <h5 class="card-title">Create your account</h5>
+                    <p class="card-text">
+                        Sign up as a player and complete your profile so captains and managers
+                        know your experience, height, and preferred position.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="gleague-step-number">2</div>
+                    <h5 class="card-title">Register for a season</h5>
+                    <p class="card-text">
+                        Join an open season during the registration window. Once approved,
+                        you’ll be entered into the draft pool or assigned to a team.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="gleague-step-number">3</div>
+                    <h5 class="card-title">Play &amp; track your stats</h5>
+                    <p class="card-text">
+                        View your schedule, track box scores, and see how you rank across
+                        the league in points, rebounds, assists, and more.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h2 class="h5">Team + stats</h2>
-                <p>Keep captains, rosters, venues, games, and player stat tracking together in one place.</p>
-                <a class="btn btn-outline-primary btn-sm" asp-area="Identity" asp-page="/Account/Register">Create account</a>
-            </div>
-        </div>
-    </div>
-</div>
+</section>

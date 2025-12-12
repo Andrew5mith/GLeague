@@ -1,22 +1,361 @@
+/* ================================
+   Base template styles
+   ================================ */
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem #99ccff;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+/* ================================
+   GLeague Theme Colors
+   ================================ */
+
+:root {
+    --gleague-columbia: #99ccff; /* Columbia Blue */
+    --gleague-columbia-deep: #4f8fd1; /* slightly deeper blue */
+    --gleague-red: #cc0000;
+    --gleague-silver: #d1d5db;
+    --gleague-white: #ffffff;
+    --gleague-bg: #f3f4f6; /* light gray background */
+    --gleague-text-main: #111827;
+    --gleague-text-muted: #6b7280;
 }
+
+/* ================================
+   Page layout
+   ================================ */
+
+body {
+    margin-bottom: 60px; /* leave room for footer */
+    background: linear-gradient(180deg, #e7f3ff 0%, var(--gleague-bg) 40%, #f9fafb 100%);
+    color: var(--gleague-text-main);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.gleague-main {
+    min-height: calc(100vh - 70px - 60px);
+}
+
+/* ================================
+   Navbar
+   ================================ */
+
+.gleague-navbar {
+    background: var(--gleague-white);
+    border-bottom: 3px solid var(--gleague-red);
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06);
+}
+
+.navbar-brand {
+    color: var(--gleague-red) !important;
+}
+
+    .navbar-brand .small {
+        letter-spacing: 0.08em;
+        color: var(--gleague-columbia-deep);
+    }
+
+/* nav links */
+.nav-link {
+    color: #1f2933 !important;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+}
+
+    .nav-link:hover,
+    .nav-link:focus,
+    .nav-link.active {
+        color: var(--gleague-red) !important;
+        border-bottom-color: var(--gleague-red);
+    }
+
+/* dropdown */
+.dropdown-menu {
+    background-color: var(--gleague-white);
+    border-color: var(--gleague-silver);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+}
+
+.dropdown-item {
+    color: #1f2933;
+}
+
+    .dropdown-item:hover {
+        background-color: #eff6ff;
+    }
+
+/* Brand logo */
+.brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 20%, var(--gleague-columbia), var(--gleague-columbia-deep));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--gleague-white);
+    box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.4);
+}
+
+.brand-ball {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 20%, var(--gleague-red), #7a0000);
+    box-shadow: inset 0 0 0 2px rgba(15, 23, 42, 0.15);
+}
+
+/* ================================
+   Cards & general UI
+   ================================ */
+
+.card {
+    background-color: var(--gleague-white);
+    color: var(--gleague-text-main);
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+.gleague-info-card {
+    border-left: 4px solid var(--gleague-columbia-deep);
+}
+
+/* ================================
+   Hero Section
+   ================================ */
+
+.gleague-hero {
+    background: linear-gradient(135deg, #ffffff 0%, #e5f0ff 40%, #dbeafe 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+    .gleague-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 120% -20%, rgba(204, 0, 0, 0.15) 0, transparent 55%);
+        pointer-events: none;
+    }
+
+    .gleague-hero .card-body {
+        position: relative;
+        z-index: 1;
+    }
+
+.gleague-badge {
+    background-color: #eef2ff;
+    color: var(--gleague-red);
+    border: 1px solid rgba(153, 204, 255, 0.8);
+}
+
+.text-highlight {
+    color: var(--gleague-red);
+}
+
+/* ================================
+   Buttons
+   ================================ */
+
+/* Blue primary button (used for "Create an Account" etc.) */
+.gleague-primary-btn {
+    background: linear-gradient(90deg, var(--gleague-columbia-deep), var(--gleague-columbia));
+    border: 1px solid #bfdbfe;
+    color: #0b1120;
+    font-weight: 600;
+}
+
+    .gleague-primary-btn:hover {
+        background: linear-gradient(90deg, var(--gleague-columbia), var(--gleague-columbia-deep));
+        color: #020617;
+    }
+
+/* Strong red CTA button */
+.btn-gleague-red {
+    background: var(--gleague-red);
+    border: 1px solid #7a0000;
+    color: var(--gleague-white);
+    font-weight: 600;
+}
+
+    .btn-gleague-red:hover {
+        background: #a80000;
+        border-color: #5a0000;
+    }
+
+.btn-outline-light {
+    border-color: #d1d5db;
+    color: #111827;
+    background-color: transparent;
+}
+
+    .btn-outline-light:hover {
+        background-color: #f3f4f6;
+        color: #111827;
+    }
+
+/* ================================
+   Footer & utilities
+   ================================ */
+
+.gleague-footer {
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem 0;
+    background-color: var(--gleague-white);
+    color: var(--gleague-text-muted);
+    font-size: 0.875rem;
+}
+
+.text-light-50 {
+    color: #6b7280 !important;
+}
+
+.text-light-70 {
+    color: #4b5563 !important;
+}
+
+
+/* ========== HERO + NEW COMPONENTS ========== */
+
+.gleague-hero {
+    border-radius: 1.5rem;
+    background: radial-gradient(circle at top left, rgba(153, 204, 255, 0.7) 0, #e5f0ff 40%, #f9fafb 100%);
+    border: none;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
+}
+
+.gleague-hero-right {
+    background: linear-gradient(135deg, #eef2ff 0%, #e0edff 100%);
+    border-top: 1px solid #dbeafe !important;
+}
+
+@media (min-width: 992px) {
+    .gleague-hero-right {
+        border-top: none !important;
+        border-left: 1px solid #dbeafe !important;
+    }
+}
+
+/* small pill tags at top */
+.gleague-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background-color: #e0edff;
+    color: #1f2937;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* stat chips on right side */
+.gleague-stat-chip {
+    border-radius: 0.9rem;
+    padding: 0.6rem 0.9rem;
+    background-color: #ffffff;
+    border: 1px solid #dbeafe;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+    .gleague-stat-chip .label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+    }
+
+    .gleague-stat-chip .value {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #111827;
+    }
+
+/* section titles with accent underline */
+.gleague-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.25rem;
+}
+
+    .gleague-section-title::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 60px;
+        height: 3px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--gleague-columbia-deep), var(--gleague-red));
+    }
+
+/* feature cards under hero */
+.gleague-feature-card {
+    border-radius: 1.25rem;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.gleague-feature-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background-color: #e0edff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+/* step numbers in "How it works" */
+.gleague-step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background-color: #e0edff;
+    color: #111827;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+/* subtle blue outline for secondary buttons */
+.gleague-outline-blue {
+    border-color: #bfdbfe !important;
+    color: #111827 !important;
+}
+
+    .gleague-outline-blue:hover {
+        background-color: #e0edff !important;
+        color: #111827 !important;
+    }
